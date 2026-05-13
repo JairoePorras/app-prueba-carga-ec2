@@ -1,0 +1,14 @@
+{
+  "name": "app-prueba-carga-ec2",
+  "version": "1.0.0",
+  "description": "Aplicaci\u00f3n web b\u00e1sica para pruebas de carga con k6 en EC2",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "cors": "^2.8.5"
+  }
+}

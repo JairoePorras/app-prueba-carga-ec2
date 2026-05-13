@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Reservas - Prueba de Carga EC2</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav">
+      <div class="brand">ReservaCloud</div>
+      <a href="/health" target="_blank">Estado del sistema</a>
+    </nav>
+
+    <section class="hero-content">
+      <p class="badge">Aplicación web de prueba desplegada en EC2</p>
+      <h1>Sistema básico de reservas para evaluación de capacidad</h1>
+      <p>
+        Esta página simula una aplicación web sencilla donde varios usuarios consultan
+        servicios disponibles al mismo tiempo. Su objetivo es servir como destino para
+        una prueba de carga controlada con k6.
+      </p>
+
+      <div class="actions">
+        <button onclick="testApi()">Probar endpoint</button>
+        <span id="api-status">Esperando prueba...</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="cards">
+      <article>
+        <h2>Consulta de servicios</h2>
+        <p>Los usuarios pueden revisar servicios disponibles, horarios y disponibilidad.</p>
+      </article>
+
+      <article>
+        <h2>Reservas iniciales</h2>
+        <p>El sistema representa una carga inicial típica antes de pasar a producción.</p>
+      </article>
+
+      <article>
+        <h2>Evaluación con k6</h2>
+        <p>El endpoint <strong>/api/test</strong> permite medir latencia, errores y degradación.</p>
+      </article>
+    </section>
+
+    <section class="info">
+      <h2>Propósito de la aplicación</h2>
+      <p>
+        Esta aplicación no busca resolver un problema empresarial completo. Su propósito
+        es ofrecer una página web estable y medible para analizar cómo una instancia EC2
+        de bajo costo responde ante diferentes niveles de usuarios concurrentes.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Prueba académica de desempeño | EC2 + Node.js + k6</p>
+  </footer>
+
+  <script>
+    async function testApi() {
+      const status = document.getElementById("api-status");
+      status.textContent = "Consultando /api/test...";
+
+      const start = performance.now();
+
+      try {
+        const response = await fetch("/api/test");
+        const elapsed = Math.round(performance.now() - start);
+
+        if (!response.ok) {
+          status.textContent = `Error HTTP ${response.status} en ${elapsed} ms`;
+          return;
+        }
+
+        status.textContent = `Respuesta correcta en ${elapsed} ms`;
+      } catch (error) {
+        status.textContent = "No se pudo conectar con el endpoint";
+      }
+    }
+  </script>
+</body>
+</html>
